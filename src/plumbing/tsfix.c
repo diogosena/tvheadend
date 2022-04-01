@@ -361,14 +361,7 @@ tsfix_update_ref(tsfix_t *tf, tfstream_t *tfs, th_pkt_t *pkt)
     LIST_FOREACH(tfs2, &tf->tf_streams, tfs_link)
       if (tfs2->tfs_audio && tfs2->tfs_last_dts_in != PTS_UNSET) {
         diff = tsfix_ts_diff(tfs2->tfs_last_dts_in, pkt->pkt_dts);
-        if (diff > 6 * 90000) {
-          tvhwarn(LS_TSFIX, "The timediff for %s is big (%"PRId64"), using audio dts",
-                  streaming_component_type2txt(tfs->tfs_type), diff);
-          tfs->tfs_parent = tfs2;
-          tfs->tfs_local_ref = tfs2->tfs_local_ref;
-        } else {
-          tfs->tfs_local_ref = tf->tf_tsref;
-        }
+        tfs->tfs_local_ref = tf->tf_tsref;
         break;
       }
     if (tfs2 == NULL)
